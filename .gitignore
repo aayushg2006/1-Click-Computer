@@ -1,0 +1,32 @@
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+
+# Dependency and build output
+**/node_modules/
+**/.next/
+**/target/
+**/build/
+**/out/
+**/coverage/
+**/.dart_tool/
+**/.pub-cache/
+**/.pub/
+**/*.tsbuildinfo
+
+# IDE and OS files
+**/.git/
+**/.idea/
+**/.vscode/
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/tmp/
+**/temp/
+
+# Local infrastructure data
+local-infra/postgres-data/
+local-infra/minio-buckets/
+frontend-consumer/.git/
