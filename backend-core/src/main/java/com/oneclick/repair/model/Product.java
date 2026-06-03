@@ -50,4 +50,9 @@ public class Product {
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();
     }
+
+    public int getStockQuantity() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStockQuantity'");
+    }
 }

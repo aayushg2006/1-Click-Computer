@@ -19,17 +19,27 @@ public class LedgerTransaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    // NEW ADDITION: THE MISSING LINK
+    // This links this specific payment directly to the customer's main Khata account.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ledger_id", nullable = false)
+    @JoinColumn(name = "ledger_account_id", nullable = false)
     private LedgerAccount ledgerAccount;
+
+    // Type should be either 'DEBIT' (they bought something, balance goes up) 
+    // or 'CREDIT' (they paid you money, balance goes down)
+    @Column(name = "transaction_type", nullable = false, length = 15)
+    private String transactionType;
 
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "transaction_type", nullable = false, length = 20)
-    private String transactionType; // 'CREDIT' or 'DEBIT'
+    // Optional: If this transaction is because of a specific invoice, we link it here!
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
-    @Column(columnDefinition = "TEXT")
+    // A simple note like "Paid via UPI" or "Advance for Custom PC"
+    @Column(length = 255)
     private String remarks;
 
     @Column(name = "transaction_date", updatable = false)
