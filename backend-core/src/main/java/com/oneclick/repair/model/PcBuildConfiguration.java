@@ -19,9 +19,23 @@ public class PcBuildConfiguration {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    // Links this specific PC configuration to a customer's tracking ticket
+    // --- NEW SLOTS ADDED FOR THE SERVICE TO USE ---
+    @Column(name = "reference_id")
+    private String referenceId;
+
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_phone")
+    private String customerPhone;
+
+    @Column(name = "status")
+    private String status;
+    // ----------------------------------------------
+
+    // We removed 'nullable = false' because they don't have a ticket until they actually buy the PC
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
     @Column(name = "total_parts_cost", nullable = false)
