@@ -15,6 +15,8 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     
     List<Ticket> findByStatus(String status);
 
+    List<Ticket> findByTrackingCodeContainingIgnoreCaseOrCustomerPhoneContainingIgnoreCaseOrderByCreatedAtDesc(String trackingCode, String customerPhone);
+
     // NEW ADDITION: 
     // This allows the backend to instantly find a repair ticket just by looking 
     // up the short code the customer typed into the website.

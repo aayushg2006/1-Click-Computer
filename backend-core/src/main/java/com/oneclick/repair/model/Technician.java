@@ -29,6 +29,7 @@ public class Technician {
     @Column(name = "phone_number", nullable = false, unique = true, length = 15)
     private String phoneNumber;
 
+    @Builder.Default
     @Column(name = "is_active")
     private Boolean isActive = true;
 

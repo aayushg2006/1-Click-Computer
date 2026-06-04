@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
     Optional<Invoice> findByInvoiceNumber(String invoiceNumber);
     List<Invoice> findByCustomerId(UUID customerId);
+
+    List<Invoice> findByInvoiceNumberContainingIgnoreCaseOrCustomerPhoneNumberContainingIgnoreCaseOrderByCreatedAtDesc(String invoiceNumber, String customerPhoneNumber);
 }

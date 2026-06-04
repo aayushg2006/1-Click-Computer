@@ -34,6 +34,7 @@ public class StoreReservation {
     private String pickupTimeslot;
 
     // Status can be: 'HELD', 'COLLECTED', or 'EXPIRED' (if they never showed up)
+    @Builder.Default
     @Column(nullable = false, length = 30)
     private String status = "HELD";
 

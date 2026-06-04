@@ -37,9 +37,11 @@ public class Product {
     @Column(name = "selling_price", nullable = false)
     private BigDecimal sellingPrice;
 
+    @Builder.Default
     @Column(name = "current_stock", nullable = false)
     private Integer currentStock = 0;
 
+    @Builder.Default
     @Column(name = "is_available_for_pickup")
     private Boolean isAvailableForPickup = true;
 
@@ -52,7 +54,6 @@ public class Product {
     }
 
     public int getStockQuantity() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStockQuantity'");
+        return currentStock != null ? currentStock : 0;
     }
 }

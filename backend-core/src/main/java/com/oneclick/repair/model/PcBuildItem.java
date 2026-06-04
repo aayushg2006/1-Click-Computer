@@ -26,6 +26,7 @@ public class PcBuildItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer quantity = 1;
 

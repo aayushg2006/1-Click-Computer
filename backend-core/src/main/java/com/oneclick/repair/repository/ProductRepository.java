@@ -19,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     
     // Find a specific product by its brand and name
     Optional<Product> findByBrandAndName(String brand, String name);
+
+    List<Product> findByNameContainingIgnoreCaseOrBrandContainingIgnoreCaseOrderByCreatedAtDesc(String name, String brand);
 }

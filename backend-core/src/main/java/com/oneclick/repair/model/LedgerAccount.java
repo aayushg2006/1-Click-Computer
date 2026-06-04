@@ -26,6 +26,7 @@ public class LedgerAccount {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @Builder.Default
     @Column(name = "current_balance", nullable = false)
     private BigDecimal currentBalance = BigDecimal.ZERO;
 
@@ -33,6 +34,7 @@ public class LedgerAccount {
     // This tells the database: "One Ledger Account has Many Transactions."
     // cascade = CascadeType.ALL means if you delete the account, it deletes the history too.
     @OneToMany(mappedBy = "ledgerAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<LedgerTransaction> transactions = new ArrayList<>();
 
     @Column(name = "last_updated_at")

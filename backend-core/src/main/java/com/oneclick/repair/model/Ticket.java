@@ -36,9 +36,11 @@ public class Ticket {
     @Column(name = "ticket_type", nullable = false, length = 30)
     private String ticketType;
 
+    @Builder.Default
     @Column(nullable = false, length = 50)
     private String status = "RECEIVED";
 
+    @Builder.Default
     @Column(name = "estimated_cost")
     private BigDecimal estimatedCost = BigDecimal.ZERO;
 
@@ -51,11 +53,14 @@ public class Ticket {
     @ElementCollection
     @CollectionTable(name = "ticket_photos", joinColumns = @JoinColumn(name = "ticket_id"))
     @Column(name = "photo_url")
+    @Builder.Default
     private List<String> conditionPhotoUrls = new ArrayList<>();
 
+    @Builder.Default
     @Column(name = "is_home_service")
     private Boolean isHomeService = false;
 
+    @Builder.Default
     @Column(name = "visit_charge")
     private BigDecimal visitCharge = BigDecimal.ZERO;
 
@@ -65,6 +70,11 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technician_id")
     private Technician assignedTechnician;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("createdAt ASC")
+    @Builder.Default
+    private List<TicketUpdate> updates = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;

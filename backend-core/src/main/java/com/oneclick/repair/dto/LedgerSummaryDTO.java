@@ -14,19 +14,18 @@ public class LedgerSummaryDTO {
     private String customerName;
     private String customerPhone;
     
-    // The total amount they owe right now
-    private BigDecimal currentBalance;
+    // The total amount they owe you right now
+    private BigDecimal currentBalance; 
     
-    // A mini-list of their payment history to show on the app screen
+    // The history of their payments to display on the app screen
     private List<TransactionRecord> recentTransactions;
 
-    // A small "nested" class just for this list
     @Data
     @Builder
     public static class TransactionRecord {
-        private String transactionType; // "CREDIT" or "DEBIT"
+        private String transactionType;
         private BigDecimal amount;
-        private String remarks; // e.g., "Paid advance via UPI"
+        private String remarks;
         private OffsetDateTime date;
     }
 }

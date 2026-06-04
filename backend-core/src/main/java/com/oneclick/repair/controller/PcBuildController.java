@@ -3,6 +3,7 @@ package com.oneclick.repair.controller;
 import com.oneclick.repair.dto.PcBuildRequest;
 import com.oneclick.repair.dto.PcBuildResponse;
 import com.oneclick.repair.service.PcBuildService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class PcBuildController {
 
     // @PostMapping means this endpoint is waiting to RECEIVE data from the website.
     @PostMapping("/quote")
-    public ResponseEntity<PcBuildResponse> getBuildQuote(@RequestBody PcBuildRequest request) {
+    public ResponseEntity<PcBuildResponse> getBuildQuote(@Valid @RequestBody PcBuildRequest request) {
         
         // Hand the order to the Chef, get the final Response box, and send it back to the customer!
         PcBuildResponse response = pcBuildService.generateBuildQuote(request);

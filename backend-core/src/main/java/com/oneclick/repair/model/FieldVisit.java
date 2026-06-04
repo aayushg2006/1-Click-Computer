@@ -31,12 +31,14 @@ public class FieldVisit {
     @Column(name = "scheduled_date", nullable = false)
     private OffsetDateTime scheduledDate;
 
+    @Builder.Default
     @Column(name = "visit_status", length = 50)
     private String visitStatus = "SCHEDULED";
 
     @Column(name = "visit_notes", columnDefinition = "TEXT")
     private String visitNotes;
 
+    @Builder.Default
     @Column(name = "is_charge_collected")
     private Boolean isChargeCollected = false;
 

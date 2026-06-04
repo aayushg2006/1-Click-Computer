@@ -31,6 +31,7 @@ public class TicketUpdate {
     @Column(name = "media_url")
     private String mediaUrl; // URL link targeting physical files stored inside MinIO
 
+    @Builder.Default
     @Column(name = "is_visible_to_customer")
     private Boolean isVisibleToCustomer = true;
 

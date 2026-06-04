@@ -38,12 +38,15 @@ public class PcBuildConfiguration {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
+    @Builder.Default
     @Column(name = "total_parts_cost", nullable = false)
     private BigDecimal totalPartsCost = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(name = "assembly_charge", nullable = false)
     private BigDecimal assemblyCharge = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(name = "is_compatibility_verified")
     private Boolean isCompatibilityVerified = false;
 

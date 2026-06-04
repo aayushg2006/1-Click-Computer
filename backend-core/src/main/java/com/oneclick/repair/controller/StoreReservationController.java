@@ -3,6 +3,7 @@ package com.oneclick.repair.controller;
 import com.oneclick.repair.dto.StoreReservationRequest;
 import com.oneclick.repair.dto.StoreReservationResponse;
 import com.oneclick.repair.service.StoreReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class StoreReservationController {
     public ResponseEntity<StoreReservationResponse> createReservation(
             // @RequestBody tells Spring to take the incoming JSON from Next.js 
             // and automatically convert it into our Java DTO box.
-            @RequestBody StoreReservationRequest request) {
+            @Valid @RequestBody StoreReservationRequest request) {
         
         // The Waiter hands the order to the Chef, and gets the final receipt back.
         StoreReservationResponse response = reservationService.createReservation(request);

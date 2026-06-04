@@ -1,51 +1,68 @@
 package com.oneclick.repair.config;
 
+import com.oneclick.repair.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    // 1. Password Encoder: This automatically scrambles passwords using BCrypt hashing
-    // string so that even if someone steals the database, they cannot read plain text passwords.
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. The Security Gatekeeper rules
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF since we are building a stateless REST API using JWT tokens
-            .csrf(csrf -> csrf.disable())
-            
-            // Define accessibility rules for endpoints
-            .authorizeHttpRequests(auth -> auth
-                // Allow anyone to access the login URL so they can get their token
-                .requestMatchers("/api/auth/login").permitAll()
-                
-                // Purely public consumer zone routes (like browsing the catalog)
-                .requestMatchers("/api/public/**").permitAll()
-                
-                // Lock down management paths strictly to ADMIN (Shop Owner)
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/ledger/**").hasRole("ADMIN")
-                .requestMatchers("/api/inventory/manage/**").hasRole("ADMIN")
-                
-                // Allow both ADMIN and TECHNICIAN to view or update field/home visit jobs
-                .requestMatchers("/api/visits/**").hasAnyRole("ADMIN", "TECHNICIAN")
-                
-                // Any other request not explicitly mentioned requires a valid login
-                .anyRequest().authenticated()
-            );
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/public/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/ledger/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/inventory/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/visits/**").hasAnyRole("ADMIN", "TECHNICIAN")
+                        .anyRequest().authenticated()
+                );
 
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

@@ -28,6 +28,7 @@ public class AppUser {
     @Column(nullable = false, length = 20)
     private Role role;
 
+    @Builder.Default
     @Column(name = "is_active")
     private Boolean isActive = true;
 

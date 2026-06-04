@@ -24,67 +24,60 @@ public class PcBuildService {
     private final ProductRepository productRepository;
     private final PcBuildConfigurationRepository buildRepository;
     private final PcBuildItemRepository buildItemRepository;
+    private final ServiceAreaService serviceAreaService;
+    private final WhatsAppMessageService whatsAppMessageService;
 
     @Transactional
     public PcBuildResponse generateBuildQuote(PcBuildRequest request) {
-        
-        // Create a short, readable ID for this specific PC build
+        boolean deliverable = serviceAreaService.isDeliverablePinCode(request.getPinCode());
+
         String refId = "PC-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-        
+
         BigDecimal grandTotal = BigDecimal.ZERO;
         List<Product> selectedProducts = new ArrayList<>();
-        StringBuilder whatsappText = new StringBuilder();
-        
-        whatsappText.append("Hello 1 Click Computer! I would like to finalize my Custom PC Build.\n\n");
-        whatsappText.append("*Reference ID:* ").append(refId).append("\n");
-        whatsappText.append("*Parts Selected:*\n");
+        StringBuilder partsText = new StringBuilder();
 
-        // Loop through all the parts the customer picked
         for (UUID productId : request.getSelectedProductIds()) {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found!"));
-            
+
             selectedProducts.add(product);
-            
-            // FIX: Using getSellingPrice() matching your Product model
             grandTotal = grandTotal.add(product.getSellingPrice());
-            
-            whatsappText.append("- ").append(product.getName())
-                        .append(" (₹").append(product.getSellingPrice()).append(")\n");
+            partsText.append("- ").append(product.getName())
+                    .append(" (INR ").append(product.getSellingPrice()).append(")\n");
         }
 
-        // Save the main configuration using the new slots we just added
         PcBuildConfiguration configuration = PcBuildConfiguration.builder()
                 .referenceId(refId)
                 .customerName(request.getCustomerName())
                 .customerPhone(request.getCustomerPhone())
-                // FIX: Matches totalPartsCost in your PcBuildConfiguration model
                 .totalPartsCost(grandTotal)
                 .status("PENDING_NEGOTIATION")
                 .build();
-        
+
         PcBuildConfiguration savedConfig = buildRepository.save(configuration);
 
-        // Save each specific part linking it to the main build
         for (Product product : selectedProducts) {
             PcBuildItem item = PcBuildItem.builder()
-                    // FIX: Matches buildConfiguration in your PcBuildItem model
                     .buildConfiguration(savedConfig)
                     .product(product)
-                    // FIX: Matches lockedSellingPrice in your PcBuildItem model
-                    .lockedSellingPrice(product.getSellingPrice()) 
+                    .lockedSellingPrice(product.getSellingPrice())
                     .build();
             buildItemRepository.save(item);
         }
 
-        whatsappText.append("\n*Estimated Total:* ₹").append(grandTotal);
-        whatsappText.append("\nMy Pin Code is: ").append(request.getPinCode());
+        String whatsappText = whatsAppMessageService.formatPcBuildNegotiation(
+                refId,
+                partsText.toString(),
+                "INR " + grandTotal,
+                request.getPinCode(),
+                deliverable
+        );
 
-        // Box up the final response and send it to the Controller
         return PcBuildResponse.builder()
                 .referenceId(refId)
                 .totalPrice(grandTotal)
-                .whatsappMessage(whatsappText.toString())
+                .whatsappMessage(whatsappText)
                 .build();
     }
 }

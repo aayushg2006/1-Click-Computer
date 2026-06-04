@@ -30,9 +30,11 @@ public class InvoiceItem {
     @Column(nullable = false)
     private String description; // Fallback text description
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer quantity = 1;
 
+    @Builder.Default
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice = BigDecimal.ZERO;
 

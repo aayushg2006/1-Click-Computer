@@ -33,15 +33,19 @@ public class Invoice {
     @Column(name = "invoice_number", unique = true, nullable = false)
     private String invoiceNumber; // e.g., OCC-2026-0001
 
+    @Builder.Default
     @Column(name = "sub_total", nullable = false)
     private BigDecimal subTotal = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(name = "gst_amount", nullable = false)
     private BigDecimal gstAmount = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(name = "payment_status", nullable = false, length = 30)
     private String paymentStatus = "UNPAID"; // PAID, PARTIAL, UNPAID
 
@@ -49,6 +53,7 @@ public class Invoice {
     private String pdfFilePath; // For local/cloud storage mapping reference
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<InvoiceItem> items = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
