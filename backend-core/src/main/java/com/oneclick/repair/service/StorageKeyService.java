@@ -15,6 +15,10 @@ public class StorageKeyService {
         return "tickets/" + safe(trackingCode) + "/" + safe(originalFilename);
     }
 
+    public String productImageKey(String productSlug, String originalFilename) {
+        return "products/" + safe(productSlug) + "/" + safe(originalFilename);
+    }
+
     private String safe(String value) {
         return value == null ? "unknown" : value.trim().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9._-]+", "-");
     }

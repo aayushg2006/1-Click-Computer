@@ -42,12 +42,15 @@ public class JwtService {
 
     // 4. Build the token with custom details, username, issue date, and an expiration timeline
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return generateToken(extraClaims, userDetails, 1000L * 60 * 60 * 24);
+    }
+
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long ttlMillis) {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                // Token stays valid for 24 hours (1000ms * 60s * 60m * 24h)
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + ttlMillis))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

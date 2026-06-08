@@ -2,6 +2,7 @@ package com.oneclick.repair.service;
 
 import com.oneclick.repair.dto.PcBuildRequest;
 import com.oneclick.repair.dto.PcBuildResponse;
+import com.oneclick.repair.dto.PublicProductDTO;
 import com.oneclick.repair.model.PcBuildConfiguration;
 import com.oneclick.repair.model.PcBuildItem;
 import com.oneclick.repair.model.Product;
@@ -26,6 +27,7 @@ public class PcBuildService {
     private final PcBuildItemRepository buildItemRepository;
     private final ServiceAreaService serviceAreaService;
     private final WhatsAppMessageService whatsAppMessageService;
+    private final ProductImageService productImageService;
 
     @Transactional
     public PcBuildResponse generateBuildQuote(PcBuildRequest request) {
@@ -78,6 +80,21 @@ public class PcBuildService {
                 .referenceId(refId)
                 .totalPrice(grandTotal)
                 .whatsappMessage(whatsappText)
+                .selectedProducts(selectedProducts.stream().map(this::toPublicProductDto).toList())
+                .build();
+    }
+
+    private PublicProductDTO toPublicProductDto(Product product) {
+        return PublicProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .brand(product.getBrand())
+                .price(product.getSellingPrice())
+                .stockQuantity(product.getStockQuantity())
+                .inStock(product.getStockQuantity() > 0)
+                .categoryName(product.getCategory() != null ? product.getCategory().getName() : "General")
+                .primaryImageUrl(productImageService.getPrimaryImageUrl(product.getId()))
+                .images(productImageService.getProductImages(product.getId()))
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,4 +20,6 @@ public class AdminProductDTO {
     private Integer currentStock;
     private Boolean availableForPickup;
     private OffsetDateTime createdAt;
+    private String primaryImageUrl;
+    private List<com.oneclick.repair.dto.ProductImageDTO> images;
 }

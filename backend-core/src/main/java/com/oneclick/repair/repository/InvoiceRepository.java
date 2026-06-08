@@ -13,5 +13,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
     Optional<Invoice> findByInvoiceNumber(String invoiceNumber);
     List<Invoice> findByCustomerId(UUID customerId);
 
-    List<Invoice> findByInvoiceNumberContainingIgnoreCaseOrCustomerPhoneNumberContainingIgnoreCaseOrderByCreatedAtDesc(String invoiceNumber, String customerPhoneNumber);
+    List<Invoice> findByInvoiceNumberContainingIgnoreCaseOrCustomer_PhoneNumberContainingIgnoreCaseOrderByCreatedAtDesc(String invoiceNumber, String customerPhoneNumber);
+
+    Optional<Invoice> findByInvoiceNumberAndTicket_TrackingCodeAndCustomer_PhoneNumber(String invoiceNumber, String trackingCode, String phoneNumber);
+
+    List<Invoice> findByTicket_TrackingCodeAndCustomer_PhoneNumberOrderByCreatedAtDesc(String trackingCode, String phoneNumber);
 }

@@ -1,6 +1,7 @@
 package com.oneclick.repair.service;
 
 import com.oneclick.repair.dto.PublicProductDTO;
+import com.oneclick.repair.dto.ProductImageDTO;
 import com.oneclick.repair.model.Product;
 import com.oneclick.repair.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class CatalogService {
 
     private final ProductRepository productRepository;
+    private final ProductImageService productImageService;
 
     // readOnly = true makes it blazing fast because we aren't saving any new data
     @Transactional(readOnly = true)
@@ -38,6 +40,8 @@ public class CatalogService {
                         .inStock(product.getCurrentStock() > 0) 
                         // Safely get the category name, avoiding crashes if the category is empty
                         .categoryName(product.getCategory() != null ? product.getCategory().getName() : "General")
+                        .primaryImageUrl(productImageService.getPrimaryImageUrl(product.getId()))
+                        .images(productImageService.getProductImages(product.getId()))
                         .build())
                 .collect(Collectors.toList());
     }

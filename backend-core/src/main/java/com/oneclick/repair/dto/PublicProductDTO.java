@@ -3,7 +3,10 @@ package com.oneclick.repair.dto;
 import lombok.Builder;
 import lombok.Data;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
+
+import com.oneclick.repair.dto.ProductImageDTO;
 
 @Data
 @Builder
@@ -20,4 +23,6 @@ public class PublicProductDTO {
     private Boolean inStock;
     
     private String categoryName;
+    private String primaryImageUrl;
+    private List<ProductImageDTO> images;
 }

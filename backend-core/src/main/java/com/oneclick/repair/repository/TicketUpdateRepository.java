@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TicketUpdateRepository extends JpaRepository<TicketUpdate, UUID> {
     List<TicketUpdate> findByTicketIdOrderByCreatedAtAsc(UUID ticketId);
+
+    List<TicketUpdate> findByTicketIdAndIsVisibleToCustomerTrueOrderByCreatedAtAsc(UUID ticketId);
 }

@@ -26,7 +26,7 @@ public class InvoiceAdminService {
     @Transactional(readOnly = true)
     public List<InvoiceAdminDTO> searchInvoices(String query) {
         String q = query == null ? "" : query.trim();
-        return invoiceRepository.findByInvoiceNumberContainingIgnoreCaseOrCustomerPhoneNumberContainingIgnoreCaseOrderByCreatedAtDesc(q, q)
+        return invoiceRepository.findByInvoiceNumberContainingIgnoreCaseOrCustomer_PhoneNumberContainingIgnoreCaseOrderByCreatedAtDesc(q, q)
                 .stream()
                 .map(this::toDto)
                 .toList();

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,21 @@ public class InventoryAdminController {
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@Valid @RequestBody AddProductRequest request) {
         return ResponseEntity.ok(inventoryAdminService.addNewProduct(request));
+    }
+
+    @PostMapping(value = "/add-with-images", consumes = {"multipart/form-data"})
+    public ResponseEntity<String> addProductWithImages(
+            @RequestPart("product") @Valid AddProductRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        return ResponseEntity.ok(inventoryAdminService.addNewProduct(request, images));
+    }
+
+    @PutMapping(value = "/{productId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<AdminProductDTO> updateProductWithImages(
+            @PathVariable UUID productId,
+            @RequestPart("product") @Valid AddProductRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        return ResponseEntity.ok(inventoryAdminService.updateProduct(productId, request, images));
     }
 
     @GetMapping

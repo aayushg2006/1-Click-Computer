@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +20,15 @@ public class InventoryAdminService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductImageService productImageService;
 
     @Transactional
     public String addNewProduct(AddProductRequest request) {
+        return addNewProduct(request, List.of());
+    }
+
+    @Transactional
+    public String addNewProduct(AddProductRequest request, List<MultipartFile> images) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Error: Category not found in the database."));
 
@@ -35,8 +42,32 @@ public class InventoryAdminService {
                 .isAvailableForPickup(request.getIsAvailableForPickup() != null ? request.getIsAvailableForPickup() : true)
                 .build();
 
-        productRepository.save(newProduct);
+        Product saved = productRepository.save(newProduct);
+        productImageService.saveProductImages(saved, images);
         return "Successfully added " + newProduct.getName() + " to the inventory!";
+    }
+
+    @Transactional
+    public AdminProductDTO updateProduct(UUID productId, AddProductRequest request, List<MultipartFile> images) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Error: Category not found in the database."));
+
+        product.setCategory(category);
+        product.setName(request.getName());
+        product.setBrand(request.getBrand());
+        product.setBuyingPrice(request.getBuyingPrice());
+        product.setSellingPrice(request.getSellingPrice());
+        product.setCurrentStock(request.getInitialStock() != null ? request.getInitialStock() : product.getStockQuantity());
+        product.setIsAvailableForPickup(request.getIsAvailableForPickup() != null ? request.getIsAvailableForPickup() : product.getIsAvailableForPickup());
+
+        Product saved = productRepository.save(product);
+        if (images != null && !images.isEmpty()) {
+            productImageService.replaceProductImages(saved, images);
+        }
+        return toAdminDto(saved);
     }
 
     @Transactional(readOnly = true)
@@ -80,6 +111,7 @@ public class InventoryAdminService {
     }
 
     private AdminProductDTO toAdminDto(Product product) {
+        List<com.oneclick.repair.dto.ProductImageDTO> images = productImageService.getProductImages(product.getId());
         return AdminProductDTO.builder()
                 .id(product.getId())
                 .categoryName(product.getCategory() != null ? product.getCategory().getName() : "General")
@@ -90,6 +122,8 @@ public class InventoryAdminService {
                 .currentStock(product.getStockQuantity())
                 .availableForPickup(product.getIsAvailableForPickup())
                 .createdAt(product.getCreatedAt())
+                .primaryImageUrl(productImageService.getPrimaryImageUrl(product.getId()))
+                .images(images)
                 .build();
     }
 }

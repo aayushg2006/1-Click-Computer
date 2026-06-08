@@ -3,6 +3,7 @@ package com.oneclick.repair.dto;
 import lombok.Builder;
 import lombok.Data;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,4 +16,6 @@ public class PcBuildResponse {
     
     // This is the magic part: a fully formatted text string ready to be sent on WhatsApp
     private String whatsappMessage; 
+
+    private List<PublicProductDTO> selectedProducts;
 }
