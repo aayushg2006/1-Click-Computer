@@ -1,0 +1,178 @@
+.header {
+  padding: 4rem 0 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.categoryTitle {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.partCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.partCard:hover {
+  border-color: var(--accent-hover);
+}
+
+.partCard.selected {
+  border-color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+.price {
+  color: var(--accent-hover);
+  font-weight: bold;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.summarySidebar {
+  position: sticky;
+  top: 100px;
+  height: max-content;
+}
+
+.warning {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  margin: 1rem 0;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.summaryList {
+  list-style: none;
+  margin: 1.5rem 0;
+}
+
+.summaryList li {
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.summaryList li span {
+  color: var(--text-secondary);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.5rem 0;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--border-color);
+  margin: 1.5rem 0;
+}
+
+.deliverySection {
+  margin-bottom: 2rem;
+}
+
+.input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.deliveryType {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.deliveryType.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--success);
+}
+
+.deliveryType.neutral {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+}
+
+.whatsappBtn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  background: #25D366; /* WhatsApp green */
+  box-shadow: 0 4px 14px 0 rgba(37, 211, 102, 0.39);
+}
+
+.whatsappBtn:hover {
+  background: #128C7E;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+.whatsappBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

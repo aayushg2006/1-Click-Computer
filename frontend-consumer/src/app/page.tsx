@@ -1,65 +1,55 @@
-import Image from "next/image";
+import styles from './page.module.css';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={styles.homeContainer}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className="container">
+          <div className={styles.heroContent}>
+            <h1 className={styles.title}>
+              Nallasopara's Premier <br />
+              <span className={styles.gradientText}>Computer Solutions</span>
+            </h1>
+            <p className={styles.subtitle}>
+              From custom gaming rigs to doorstep laptop repairs, we provide fast, reliable, and transparent tech services in Vasai-Virar.
+            </p>
+            <div className={styles.ctaGroup}>
+              <a href="/pc-builder" className="btn btn-primary">Build Your Custom PC</a>
+              <a href="/repair" className="btn btn-secondary">Book Doorstep Repair</a>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Services Section */}
+      <section className={styles.servicesSection}>
+        <div className="container">
+          <h2 className={styles.sectionTitle}>Our Services</h2>
+          <div className={styles.grid}>
+            <div className="card">
+              <h3>Custom PC Builds</h3>
+              <p>Use our live compatibility engine to design your dream PC. Free doorstep setup in Vasai-Virar.</p>
+              <a href="/pc-builder" className={styles.cardLink}>Start Building &rarr;</a>
+            </div>
+            <div className="card">
+              <h3>Doorstep Repairs</h3>
+              <p>Book a technician to visit your home. Track your repair status live without logging in.</p>
+              <a href="/repair" className={styles.cardLink}>Book Now &rarr;</a>
+            </div>
+            <div className="card">
+              <h3>Smart Accessories</h3>
+              <p>Reserve premium accessories online and pick them up instantly from our Nallasopara store.</p>
+              <a href="/catalog" className={styles.cardLink}>Browse Catalog &rarr;</a>
+            </div>
+            <div className="card">
+              <h3>CCTV Solutions</h3>
+              <p>Get an instant cost estimate for your security needs and schedule an on-site survey.</p>
+              <a href="/cctv-estimator" className={styles.cardLink}>Get Estimate &rarr;</a>
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

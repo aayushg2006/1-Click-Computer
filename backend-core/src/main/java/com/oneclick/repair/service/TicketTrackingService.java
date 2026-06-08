@@ -31,7 +31,7 @@ public class TicketTrackingService {
                 .ticketType(ticket.getTicketType())
                 .status(ticket.getStatus())
                 .deviceDetails(ticket.getDeviceDetails())
-                .conditionPhotoUrls(ticket.getConditionPhotoUrls())
+                .conditionPhotoUrls(ticket.getConditionPhotoUrls() != null ? new java.util.ArrayList<>(ticket.getConditionPhotoUrls()) : new java.util.ArrayList<>())
                 .approvedEstimatedCost(ticket.getEstimatedCost() != null
                         ? "INR " + ticket.getEstimatedCost()
                         : "Pending Diagnosis")
