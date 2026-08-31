@@ -6,6 +6,8 @@ import 'screens/ledger_screen.dart';
 import 'screens/inventory_intake_screen.dart';
 import 'screens/lead_management_screen.dart';
 import 'screens/field_crm_screen.dart';
+import 'screens/login_screen.dart';
+import 'services/auth_service.dart';
 
 void main() {
   runApp(
@@ -15,11 +17,22 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
+    Widget homeWidget;
+    if (authState.isInitializing) {
+      homeWidget = const Scaffold(body: Center(child: CircularProgressIndicator()));
+    } else if (authState.isAuthenticated) {
+      homeWidget = const AppShell();
+    } else {
+      homeWidget = const LoginScreen();
+    }
+
     return MaterialApp(
       title: '1 Click Command Center',
       theme: ThemeData(
@@ -29,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AppShell(),
+      home: homeWidget,
     );
   }
 }
